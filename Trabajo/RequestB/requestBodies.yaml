@@ -1,0 +1,76 @@
+vehiculoRB:
+  description: '`Vehiculo` data'
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          autoId:
+            description: ID unico del Vehiculo
+            type: integer
+            format: int64
+          matricula:
+            description: Matricula del Vehiculo
+            type: string
+            format: binary
+          clienteid:
+            description: Id del propietario
+            type: integer
+            format: int64
+          modelo:
+            description: Modelo del Vehiculo
+            type: string
+            format: binary
+          marca:
+            description: Marca del Vehiculo
+            type: string
+            format: binary
+          fabricacionfecha:
+            description: Fecha de fabricacion del Vehiculo
+            type: string
+            format: date
+      examples:
+        request:
+          $ref: '../examples/examples.yaml#/Request'
+
+
+vehiculoPutRB:
+  description: '`Vehiculo` modification data'
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          autoId:
+            description: ID unico del Vehiculo
+            type: integer
+            format: int64
+          matricula:
+            description: Matricula del Vehiculo
+            type: string
+            format: binary
+          clienteid:
+            description: Id del propietario
+            type: integer
+            format: int64
+          modelo:
+            description: Modelo del Vehiculo
+            type: string
+            format: binary
+          marca:
+            description: Marca del Vehiculo
+            type: string
+            format: binary
+          problemas:
+            description: Problemas del Vehiculo
+            type: string
+            format: binary
+          fabricacionfecha:
+            description: Fecha de fabricacion del Vehiculo
+            type: string
+            format: date
+      examples:
+        RequestPut:
+          $ref: '../examples/examples.yaml#/RequestPut'

@@ -1,0 +1,23 @@
+ETag:
+  description: Entity Tag (unique identifier provided for cache validation)
+  schema:
+    type: string
+    pattern: "[0-9a-f]*"
+    x-faker: random.hexaDecimal
+    example:
+      33a64df551425fcc
+
+Location:
+  description: '`URI` del nuevo recurso'
+  schema:
+    type: string
+    format: url
+    x-faker: internet.url
+    example:
+      http://127.0.0.1:80/api/v1/vehiculos/1936
+Allow:
+  description: Lista de métodos HTTP soportados
+  schema:
+    type: string
+  example:
+    GET,DELETE,PUT,OPTIONS

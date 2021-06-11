@@ -1,0 +1,28 @@
+Response_404:
+  description: '`NOT FOUND`: resource not found'
+  content:
+    application/problem+json:
+      schema:
+        $ref: '../schemas/HTTP_Problem.yaml#/HTTP_Problem'
+      examples:
+        response-http-404:
+          $ref: '../examples/examples.yaml#/response-http-404'
+
+Response_412:
+  description: '`PRECONDITION FAILED`: no se cumple alguna condición previa'
+  content:
+    application/problem+json:
+      schema:
+        $ref: '../schemas/HTTP_Problem.yaml#/HTTP_Problem'
+      examples:
+        response-http-412:
+          $ref: '../examples/examples.yaml#/response-http-412'
+Response_422:
+  description: '`UNPROCESSABLE ENTITY`: falta el userid, la referencia o las unidades'
+  content:
+    application/problem+json:
+      schema:
+        $ref: '../schemas/HTTP_Problem.yaml#/HTTP_Problem'
+      examples:
+        response-http-422:
+          $ref: '../examples/examples.yaml#/response-http-422'

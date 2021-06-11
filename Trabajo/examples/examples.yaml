@@ -1,0 +1,118 @@
+Vehiculos:
+  value:
+    - autoId: 1234567
+      matricula: "4444AAA"
+      clienteid: 12312
+      modelo: "Clase A"
+      marca: "Mercedes"
+      problemas: "El motor no funciona"
+      links:
+        parent:
+          href: /api/v1/vehiculos
+          rel:  listavehiculos
+        self:
+          href: /api/v1/vehiculos/1234567
+          rel: Modificar y Borrar
+        cliente:
+          href: /api/v1/vehiculos/cliente/12312
+          rel: lista vehiculos del mismo cliente
+    - autoId: 1234876
+      matricula: "1111BBB"
+      clienteid: 66666
+      modelo: "Clase B"
+      marca: "Mercedes"
+      problemas: "Los frenos no funcionan"
+      links:
+        parent:
+          href: /api/v1/vehiculos
+          rel: listavehiculos
+        self:
+          href: /api/v1/vehiculos/1234876
+          rel: Modificar y Borrar
+        cliente:
+          href: /api/v1/vehiculos/cliente/66666
+          rel: lista vehiculos del mismo cliente
+VehiculosPorClienteId:
+  value:
+    - autoId: 1234567
+      matricula: "4444AAA"
+      clienteid: 53335
+      modelo: "Clase A"
+      marca: "Mercedes"
+      problemas: "El motor no funciona"
+      links:
+        parent:
+          href: /api/v1/vehiculos
+          rel: listavehiculos
+        self:
+          href: /api/v1/vehiculos/1234567
+          rel: Modificar y Borrar
+    - autoId: 1234876
+      matricula: "1111BBB"
+      clienteid: 53335
+      modelo: "Clase B"
+      marca: "Mercedes"
+      problemas: "Los frenos no funcionan"
+      links:
+        parent:
+          href: /api/v1/vehiculos
+          rel: listavehiculos
+        self:
+          href: /api/v1/vehiculos/1234876
+          rel: Modificar y Borrar
+Request:
+  value:
+    - autoId: 765432
+      matricula: "1222GGB"
+      clienteid: 66886
+      modelo: "Clase B"
+      marca: "Mercedes"
+RequestPut:
+  value:
+    - autoId: 765432
+      matricula: "1222GGB"
+      clienteid: 66886
+      modelo: "Clase B"
+      marca: "Mercedes"
+      problemas: "El motor no funciona"
+
+Vehiculo:
+  value:
+    - autoId: 765432
+      matricula: "1222GGB"
+      clienteid: 66886
+      modelo: "Clase B"
+      marca: "Mercedes"
+      problemas: "Los frenos no funcionan"
+      links:
+        parent:
+          href: /api/v1/vehiculos
+          rel: listavehiculos
+        self:
+          href: /api/v1/vehiculos/765432
+          rel: Modificar y Borrar
+        cliente:
+          href: /api/v1/vehiculos/cliente/12312
+          rel: lista vehiculos del mismo cliente
+
+response-http-404:
+  value:
+    type: https://httpstatuses.com/404
+    title: NOT FOUND
+    status: 404
+    detail: El recurso solicitado no está disponible...
+    instance: about:blank
+response-http-412:
+  value:
+    type: https://httpstatuses.com/412
+    title: PRECONDITION FAILED
+    status: 412
+    detail: No se cumple alguna condición previa...
+    instance: about:blank
+response-http-422:
+  value:
+    type: https://httpstatuses.com/422
+    title: UNPROCESSABLE ENTITY
+    status: 422
+    detail: Falta la referencia o las unidades...
+    instance: about:blank

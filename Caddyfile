@@ -1,0 +1,36 @@
+:80
+
+respond "Choose an endpoint! All endpoints are on /api/v1/"
+
+#SS2
+route /api/v1/vehiculos* {
+	uri strip_prefix /api/v1
+	reverse_proxy ss2-backend:4010
+}
+route /api/v1/vehiculos-doc/* {
+	uri strip_prefix /api/v1/vehiculos-doc
+	reverse_proxy ss2-frontend:8080
+}
+
+#SS3
+route /api/v1/jobs* {
+	uri strip_prefix /api/v1
+	reverse_proxy ss3:8080
+}
+
+#SS4
+route /api/v1/notificacion* {
+	#uri strip_prefix /api/v1
+	uri replace /api/v1/ /AOS4/
+	reverse_proxy ss4:8080
+}
+
+#SS5
+route /api/v1/factura* {
+	reverse_proxy ss5:8080
+}
+
+#SS6
+route /api/v1/recambios* {
+	reverse_proxy ss6:8080
+}

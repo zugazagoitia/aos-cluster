@@ -1,0 +1,22 @@
+autoId:
+  name: autoId
+  in: path
+  description: ID del Vehiculo
+  required: true
+  schema:
+    type: integer
+ifMatchParam:
+  name: If-Match
+  in: header
+  description: "ETag del recurso que se desea modificar"
+  required: true
+  schema:
+    type: string
+    pattern: "[0-9a-f]*"
+clienteid:
+  name: clienteid
+  in: path
+  description: Id del propietario
+  required: true
+  schema:
+    type: integer

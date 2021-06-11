@@ -1,0 +1,292 @@
+openapi: "3.0.3"
+info:
+  title: "Subsistema 2: Gestion de Vehiculos"
+  version: "0.0.3.2"
+  description: '[UPM] AOS Subsistema_2: Gestión de los vehículos que son propiedad de los clientes y que se reparan y/o revisan en el taller'
+  license:
+    name: MIT
+    url: 'https://opensource.org/licenses/MIT'
+  contact:
+    name: Manuel de Abajo Aragon - BN0246
+    email: manuelde.abajo.aragon@alumnos.upm.es
+servers:
+  - url: '{schema}://{server}:{port}/{basePath}'
+    description: Servidor local
+    variables:
+      schema:
+        description: Esquema
+        default: http
+        enum:
+          - http
+          - https
+      server:
+        description: Nombre del servidor
+        default: 127.0.0.1
+      port:
+        description: Número de puerto
+        default: '80'
+      basePath:
+        description: Ruta base
+        default: api/v1
+tags:
+  - name: 'Vehiculos'
+    description: 'Vehiculos del Cliente'
+paths:
+  /vehiculos:
+    get:
+      tags:
+        - Vehiculos
+      summary: Obtiene todos los vehiculos
+      operationId: upm_aos_vehiculo_cget
+      responses:
+        200:
+          description: Array de vehiculos
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  vehiculos:
+                    description: array de vehiculos
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Vehiculo'
+              examples:
+                VehiculosExamples:
+                  $ref: '#/components/examples/Vehiculos'
+        404:
+          $ref: '#/components/responses/Response_404'
+    post:
+      tags:
+        - Vehiculos
+      summary: Añade un nuevo vehiculo
+      operationId: upm_aos_vehiculo_post
+      requestBody:
+        $ref: '#/components/requestBodies/vehiculoRB'
+      responses:
+        201:
+          description: vehiculo creado
+          headers:
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehiculo'
+              examples:
+                Post201:
+                  $ref: '#/components/examples/Vehiculo'
+            
+        422:
+          $ref: '#/components/responses/Response_422'
+          
+    options:
+      tags:
+       - Vehiculos
+      summary: Proporciona la lista de los métodos HTTP soportados.
+      operationId: upm_aos_vehiculo_coptions
+      responses:
+        204:
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+              
+  '/vehiculos/{autoId}':
+    parameters:
+      - $ref: '#/components/parameters/autoId'    
+    get:
+      tags:
+      - Vehiculos
+      summary: Devuelve un Vehiculo identificado por su Matricula
+      operationId: upm_aos_vehiculo_get
+      responses:
+        200:
+          description: Vehiculo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehiculo'
+              examples:
+                GetVehicle:
+                  $ref: '#/components/examples/Vehiculo'
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'          
+        404:
+          $ref: '#/components/responses/Response_404'
+          
+    delete:
+      tags:
+      - Vehiculos
+      summary: Elimina un Vehiculo identificado por su Matricula
+      operationId: upm_aos_vehiculo_delete
+      responses:
+        204:
+          description: Vehiculo eliminado &lt;Cuerpo de la respuesta vacío&gt;
+        404:
+          $ref: '#/components/responses/Response_404'        
+
+    options:
+      tags:
+      - Vehiculos
+      summary: Proporciona la lista de los métodos HTTP soportados.
+      operationId: upm_aos_vehiculo_options
+      responses:
+        204:
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'      
+    put:
+      tags:
+      - Vehiculos
+      summary: Modifica al Vehiculo.
+      operationId: upm_aos_vehiculo_put
+      parameters:
+        - $ref: '#/components/parameters/ifMatchParam'
+      requestBody:
+        $ref: '#/components/requestBodies/vehiculoPutRB'
+      responses:
+        209:
+          description: '`Content Returned`: el vehiculo ha sido modificado'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehiculo'
+              examples:
+                VehiclePut:
+                  $ref: '#/components/examples/Vehiculo'
+              
+        404:
+          $ref: '#/components/responses/Response_404'
+        412:
+          $ref: '#/components/responses/Response_412'      
+
+
+  '/vehiculos/cliente/{clienteid}':
+    parameters:
+      - $ref: '#/components/parameters/clienteid'
+    get:
+      tags:
+        - Vehiculos
+      summary: Obtiene todos los vehiculos de un cliente identificado por su clienteId
+      operationId: upm_aos_vehiculos_cliente_get
+      responses:
+        200:
+          description: Array de vehiculos
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  vehiculos:
+                    description: array de vehiculos
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Vehiculo'
+              examples:
+                VehiculosClienteExamples:
+                  $ref: '#/components/examples/VehiculosPorClienteId'
+        404:
+          $ref: '#/components/responses/Response_404'
+    delete:
+      tags:
+      - Vehiculos
+      summary: Elimina todos los vehiculos de un cliente identificado por su clienteId
+      operationId: upm_aos_vehiculos_cliente_delete
+      responses:
+        204:
+          description: Vehiculos eliminados &lt;Cuerpo de la respuesta vacío&gt;
+        404:
+          $ref: '#/components/responses/Response_404'
+
+    options:
+      tags:
+        - Vehiculos
+      summary: Proporciona la lista de los métodos HTTP soportados.
+      operationId: upm_aos_vehiculos_cliente_coptions
+      responses:
+        204:
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+
+
+
+
+
+
+
+components:
+
+  schemas:
+    Vehiculo:
+      $ref: './schemas/Vehiculo.yaml#/Vehiculo'
+
+    HTTP_Problem:
+      $ref: './schemas/HTTP_Problem.yaml#/HTTP_Problem'
+
+  headers:
+    ETag:
+      $ref: './headers/headers.yaml#/ETag'
+    Location:
+      $ref: './headers/headers.yaml#/Location'
+    Allow:
+      $ref: './headers/headers.yaml#/Allow'
+  
+  parameters:
+    autoId:
+      $ref: './parameters/parameters.yaml#/autoId'
+    ifMatchParam:
+      $ref: './parameters/parameters.yaml#/ifMatchParam'
+    clienteid:
+      $ref: './parameters/parameters.yaml#/clienteid'
+  
+  requestBodies:
+    vehiculoRB:
+      $ref: './RequestB/requestBodies.yaml#/vehiculoRB'
+              
+              
+    vehiculoPutRB:
+      $ref: './RequestB/requestBodies.yaml#/vehiculoPutRB'
+
+
+  responses:
+    Response_404:
+      $ref: './responses/responses.yaml#/Response_404'
+    
+    Response_412:
+      $ref: './responses/responses.yaml#/Response_412'
+    Response_422:
+      $ref: './responses/responses.yaml#/Response_422'
+
+
+  examples:
+    Vehiculos:
+      $ref: './examples/examples.yaml#/Vehiculos'
+    Request:
+      $ref: './examples/examples.yaml#/Request'
+    VehiculosPorClienteId:
+      $ref: './examples/examples.yaml#/VehiculosPorClienteId'
+    Vehiculo:
+      $ref: './examples/examples.yaml#/Vehiculo'
+    RequestPut:
+      $ref: './examples/examples.yaml#/RequestPut'
+
+    response-http-404:
+      $ref: './examples/examples.yaml#/response-http-404'
+    response-http-412:
+      $ref: './examples/examples.yaml#/response-http-412'
+    response-http-422:
+      $ref: './examples/examples.yaml#/response-http-422'
+
+
+   

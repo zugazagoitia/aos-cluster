@@ -1,0 +1,117 @@
+version: "3"
+
+services:
+
+  proxy:
+    image: caddy
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    ports:
+      - 80:80
+    networks:
+      # - ss1-proxy
+      - ss2-proxy
+      - ss3-proxy
+      - ss4-proxy
+      - ss5-proxy
+      - ss6-proxy  
+    depends_on:
+      - ss2-backend
+      - ss2-frontend
+      - ss3
+      - ss4
+      - ss5
+      - ss6
+
+  ss2-backend:
+    image: stoplight/prism:4
+    command: mock --cors -h 0.0.0.0 "/aos/subsistema2.yaml"
+    volumes:
+      - ./Trabajo:/aos:ro
+    networks:
+      - ss2-proxy 
+      - ss2-net        
+
+  ss2-frontend:
+    image: swaggerapi/swagger-ui
+    environment:
+      SWAGGER_JSON: /aos/subsistema2.yaml
+    volumes:
+      - ./Trabajo:/aos:ro    
+    networks:
+      - ss2-proxy 
+      - ss2-net        
+
+  ss3:
+    image: albertozuga/aos-ss3:1.0.2
+    networks:
+      - ss3-net
+      - ss3-proxy
+    depends_on:
+      - ss3-db
+          
+  ss3-db:
+    image: mysql:8
+    restart: always
+    networks:
+      - ss3-net
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=jobs
+      - MYSQL_USER=jobservice
+      - MYSQL_PASSWORD=jobservice
+    volumes:
+      - db_data:/var/lib/mysql
+
+
+  ss4:
+    image: jvidalc/aos_subsistema4_notificaciones
+    networks:
+      - ss4-net
+      - ss4-proxy
+    depends_on:
+      - ss4-db
+          
+
+  ss4-db:
+    image: mysql:8
+    restart: always
+    networks:
+      - ss4-net
+    environment:
+      - MYSQL_ROOT_PASSWORD=qwerty
+      - MYSQL_DATABASE=aos4
+      - MYSQL_USER=qwerty
+      - MYSQL_PASSWORD=qwerty
+    volumes:
+      - db_data2:/var/lib/mysql
+      - ./dbdump:/docker-entrypoint-initdb.d
+
+  ss5:
+    image: rugana90/aos-ss5:0.5
+    networks: 
+      - ss5-proxy
+
+  ss6:
+    image: clatange/aos:latest
+    networks: 
+      - ss6-proxy    
+
+networks:
+  ss1-net:
+  ss2-net:
+  ss3-net: 
+  ss4-net:
+  # ss5-net:
+  ss6-net:
+
+  ss1-proxy:
+  ss2-proxy:
+  ss3-proxy: 
+  ss4-proxy:
+  ss5-proxy:
+  ss6-proxy:
+
+volumes:
+  db_data:
+  db_data2:  
