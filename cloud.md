@@ -34,13 +34,13 @@ Se han seguido los siguientes pasos:
 1. Crear el AKS 
 2. Conectándose por la azure shell, descargar el repositorio desde git
 3. Connectar la shell al cluster de kubernetes creado
-4. Instalar nginx ingress
+4. Instalar Nginx Ingress
 ![Figura 6](/images/cloud5.png?raw=true)
 
 5. Ejecutar `kubectl apply -f .` sobre la carpeta `kubernetes`
 6. Extraer la ip pública proporcionada por azure
 ![Figura 7](/images/cloud6.png?raw=true)
 
-Una vez completados los anteriores pasos nmos podemos conectar a la IP proporcionada para comprobar el funcionamiento del API.
+Una vez completados los anteriores pasos nos podemos conectar a la IP proporcionada para comprobar el funcionamiento del API.
 
 ![Figura 8](/images/cloud7.png?raw=true)
