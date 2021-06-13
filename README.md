@@ -18,6 +18,12 @@ Los servicios que así lo requieren disponen de un contenedor extra para mantene
 Para aislar el tráfico dentro del despliegue se han definido 6 redes, una por microservicio. Estas redes sirven para comunicarse con sus respectivas bases de datos si las hubiera y para el acceso del proxy inverso al endpoint de cada uno.
 
 ### Instalación
+<<<<<<< HEAD
+
+> :warning: **Uso elevado de memoria**: Debido a la gran cantidad de contenedores, se recomienda tener al menos `3GB` libres de RAM para el despliegue del servicio.
+
+=======
+>>>>>>> main
 
 Para desplegar los contenedores de Docker-compose ejecutar en el directorio `compose`
 
@@ -74,6 +80,8 @@ Debido a que se desconoce la implementación de muchos de los servicios no se ha
 
 
 ### Instalación
+
+> :warning: **Uso elevado de memoria**: Debido a la gran cantidad de contenedores, se recomienda tener al menos `3GB` libres de RAM para el despliegue del servicio.
 
 Para el despliegue del cluster de kubernetes hay que seguir los siguientes pasos:
 
