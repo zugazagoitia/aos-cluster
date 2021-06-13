@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ss2-db
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: ss2-db
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ss2-db
+spec:
+  selector:
+    matchLabels:
+      app: ss2-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ss2-db
+    spec:
+      containers:
+      - image: asdiaz/aos_bd:1.2
+        name: ss2-db
+        env:
+        - name: MYSQL_DATABASE
+          value: practica_aos
+        - name: MYSQL_ROOT_PASSWORD
+          value: "1234"
+        ports:
+        - containerPort: 3306
+          name: ss2-db

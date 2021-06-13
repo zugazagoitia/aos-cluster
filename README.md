@@ -1,1 +1,70 @@
-aos-cluster
+# Implementación de microservicios
+
+## Docker
+
+### Estructura
+
+### Instalación y Uso
+
+Para desplegar los contenedores de Docker-compose ejecutar en el directorio `compose`
+
+```bash
+docker compose up
+```
+ o lo que es lo mismo
+
+ ```bash
+cd compose
+docker compose up
+```
+
+## Kubernetes
+
+### Estructura
+
+El despliegue de kubernetes se puede apreciar en el siguiente diagrama:
+
+![Diagrama de despliegue de kubernetes](/images/kube.png?raw=true)
+
+Todos los servicios son accedidos a través del Ingress, que actúa tanto de proxy inverso como de load balancer para los diferentes microservicios.
+
+Además se unifica el root del api a `/api/v1/`, reescribiendo las rutas para que cada microservicio pueda procesar las peticiones de acuerdo a su propia estructura interna.
+
+Los servicios que así lo requieren disponen de un servicio StateFull para mantener los datos. Se Consigue la persistencia a través de la creación de objetos PersistentVolumes. En el caso de algún servicio que ha requerido un archivo de configuración o inicialización, este le ha sido provisto a través de un ConfigMap.
+
+En la configuración que se proporciona todos los servicios contienen una única réplica para facilitar el despliegue.
+
+Debido a que se desconoce la implementación de muchos de los servicios no se han aplicado restricciones de recursos a excepción de un límite de almacenamiento en los PersistentVolumes.
+
+
+### Instalación y uso
+
+Para el despliegue del cluster de kubernetes hay que seguir los siguientes pasos:
+
+1. Instalar Nginx Ingress Controller
+   
+   ```bash
+   kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
+    ```
+2. Mientras se levanta el servicio, cambiar al directorio `kubernetes`
+
+    ```bash
+    cd kubernetes
+    ```
+3. Tras haber esperado unos 20 segundos a la inicialización del ingress controller aplicar todos las definiciones de objetos presentes en la carpeta.
+    ```bash
+    kubectl apply -f .
+    ```
+
+Una vez iniciados todos los servicios se podrá acceder a través de la dirección del host en el puerto 80 al endpoint del API, situado en `/api/v1/`.
+
+Ejemplo:
+```bash
+curl --request GET \
+  --url http://localhost/api/v1/notificacion \
+  --header 'Accept: application/json' \
+  --header 'Content-Type: application/json'
+```
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)

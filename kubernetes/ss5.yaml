@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ss5
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ss5
+  template:
+    metadata:
+      labels:
+        app: ss5
+    spec:
+      containers:
+      - name: ss5
+        image: rugana90/aos-ss5:0.5
+        ports:
+        - containerPort: 8080
+          name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ss5
+spec:
+  selector:
+    app: ss5
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      name: http

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ss1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ss1
+  template:
+    metadata:
+      labels:
+        app: ss1
+    spec:
+      containers:
+      - name: ss1
+        image: zcj583/ss1-onlyflask
+        ports:
+        - containerPort: 8080
+          name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ss1
+spec:
+  selector:
+    app: ss1
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      name: http

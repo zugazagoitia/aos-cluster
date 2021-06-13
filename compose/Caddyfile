@@ -2,6 +2,13 @@
 
 respond "Choose an endpoint! All endpoints are on /api/v1/"
 
+#SS1
+route /api/v1/clientes* {
+	uri strip_prefix /api/v1
+	reverse_proxy ss1:8080
+}
+
+
 #SS2
 route /api/v1/vehiculos* {
 	uri strip_prefix /api/v1

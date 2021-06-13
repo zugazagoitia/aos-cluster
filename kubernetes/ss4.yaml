@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ss4
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ss4
+  template:
+    metadata:
+      labels:
+        app: ss4
+    spec:
+      containers:
+      - name: ss4
+        image: jvidalc/aos_subsistema4_notificaciones:latest
+        ports:
+        - containerPort: 8080
+          name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ss4
+spec:
+  selector:
+    app: ss4
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      name: http

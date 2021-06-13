@@ -1,0 +1,109 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ss4-config
+data:
+  dump.sql: |
+    USE aos4;
+
+    CREATE TABLE IF NOT EXISTS trabajos 
+        (id INT NOT NULL,
+        nombreTrabajo VARCHAR(60) NOT NULL, 
+        estado VARCHAR(12) NOT NULL, 
+        PRIMARY KEY (id));
+
+    CREATE TABLE IF NOT EXISTS notificaciones 
+        (id INT NOT NULL AUTO_INCREMENT, 
+        clienteId INT NOT NULL, 
+        fechaNotificacion DATE NOT NULL, 
+        trabajoId INT NOT NULL,
+        INDEX ind_trabajo (trabajoId),
+        FOREIGN KEY (trabajoId)
+            REFERENCES trabajos(id)
+            ON DELETE NULL
+            ON UPDATE CASCADE);
+
+   
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ss4-db-volume
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/mysql-ss4"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ss4-db-claim
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysqldb
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: mysqldb
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysqldb
+spec:
+  selector:
+    matchLabels:
+      app: mysqldb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysqldb
+    spec:
+      containers:
+      - image: mysql:8
+        name: mysqldb
+        env:
+        - name: MYSQL_DATABASE
+          value: aos4
+        - name: MYSQL_PASSWORD 
+          value: qwerty
+        - name: MYSQL_ROOT_PASSWORD
+          value: qwerty
+        - name: MYSQL_USER
+          value: qwerty
+        ports:
+        - containerPort: 3306
+          name: mysqldb
+        volumeMounts:
+        - name: ss4-db-persistent-storage
+          mountPath: /var/lib/mysql
+        - name: config-volume
+          mountPath: /docker-entrypoint-initdb.d/dump.sql
+          subPath: dump.sql  
+
+      volumes:
+      - name: ss4-db-persistent-storage
+        persistentVolumeClaim:
+          claimName: ss4-db-claim      
+      - name: config-volume
+        configMap:
+          name: ss4-config    

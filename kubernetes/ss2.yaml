@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ss2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ss2
+  template:
+    metadata:
+      labels:
+        app: ss2
+    spec:
+      containers:
+      - name: ss2
+        image: mguindel/aos_subsistema2:2.5
+        ports:
+        - containerPort: 8080
+          name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ss2
+spec:
+  selector:
+    app: ss2
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      name: http

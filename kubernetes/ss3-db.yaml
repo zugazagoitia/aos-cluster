@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ss3-db
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: ss3-db
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ss3-db
+spec:
+  selector:
+    matchLabels:
+      app: ss3-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ss3-db
+    spec:
+      containers:
+      - image: mysql:8
+        name: ss3-db
+        env:
+        - name: MYSQL_DATABASE
+          value: jobs
+        - name: MYSQL_PASSWORD 
+          value: jobservice
+        - name: MYSQL_ROOT_PASSWORD
+          value: root
+        - name: MYSQL_USER
+          value: jobservice
+        ports:
+        - containerPort: 3306
+          name: ss3-db
+        volumeMounts:
+        - name: ss3-db-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: ss3-db-persistent-storage
+        persistentVolumeClaim:
+          claimName: ss3-db-claim

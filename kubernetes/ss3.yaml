@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ss3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ss3
+  template:
+    metadata:
+      labels:
+        app: ss3
+    spec:
+      containers:
+      - name: ss3
+        image: albertozuga/aos-ss3:1.0.2
+        ports:
+        - containerPort: 8080
+          name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ss3
+spec:
+  selector:
+    app: ss3
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      name: http

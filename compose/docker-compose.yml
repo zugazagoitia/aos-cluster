@@ -9,13 +9,15 @@ services:
     ports:
       - 80:80
     networks:
-      # - ss1-proxy
-      - ss2-proxy
-      - ss3-proxy
-      - ss4-proxy
-      - ss5-proxy
-      - ss6-proxy  
+      - ss1-net
+      - ss2-net
+      - ss3-net
+      - ss4-net
+      - ss5-net
+      - ss6-net  
     depends_on:
+      - ss1
+      - mongodb
       - ss2-backend
       - ss2-frontend
       - ss3
@@ -23,13 +25,29 @@ services:
       - ss5
       - ss6
 
+  ss1:
+    image: zcj583/ss1
+    networks:
+      - ss1-net
+    depends_on:
+      - mongodb
+  
+  mongodb:
+    image: mongo
+    restart: always
+    networks:
+      - ss1-net
+    environment:
+      MONGO_INITDB_DATABASE: ss1
+    volumes:
+    - db_data3:/var/lib/mongo    
+
   ss2-backend:
     image: stoplight/prism:4
     command: mock --cors -h 0.0.0.0 "/aos/subsistema2.yaml"
     volumes:
       - ./Trabajo:/aos:ro
     networks:
-      - ss2-proxy 
       - ss2-net        
 
   ss2-frontend:
@@ -39,14 +57,12 @@ services:
     volumes:
       - ./Trabajo:/aos:ro    
     networks:
-      - ss2-proxy 
       - ss2-net        
 
   ss3:
     image: albertozuga/aos-ss3:1.0.2
     networks:
       - ss3-net
-      - ss3-proxy
     depends_on:
       - ss3-db
           
@@ -68,7 +84,6 @@ services:
     image: jvidalc/aos_subsistema4_notificaciones
     networks:
       - ss4-net
-      - ss4-proxy
     depends_on:
       - ss4-db
           
@@ -90,28 +105,22 @@ services:
   ss5:
     image: rugana90/aos-ss5:0.5
     networks: 
-      - ss5-proxy
+      - ss5-net
 
   ss6:
     image: clatange/aos:latest
     networks: 
-      - ss6-proxy    
+      - ss6-net 
 
 networks:
   ss1-net:
   ss2-net:
   ss3-net: 
   ss4-net:
-  # ss5-net:
+  ss5-net:
   ss6-net:
-
-  ss1-proxy:
-  ss2-proxy:
-  ss3-proxy: 
-  ss4-proxy:
-  ss5-proxy:
-  ss6-proxy:
 
 volumes:
   db_data:
   db_data2:  
+  db_data3:  
